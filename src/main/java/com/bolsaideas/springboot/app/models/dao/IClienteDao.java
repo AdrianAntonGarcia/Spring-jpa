@@ -8,4 +8,6 @@ public interface IClienteDao {
 
 	public List<Cliente> findaAll();
 
+	public void save(Cliente cliente);
+
 }
