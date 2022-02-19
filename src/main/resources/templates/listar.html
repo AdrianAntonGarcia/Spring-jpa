@@ -49,12 +49,13 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>id</th>
-            <th>nombre</th>
-            <th>apellido</th>
-            <th>correo</th>
-            <th>fecha</th>
-            <th>editar</th>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Fecha</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -68,7 +69,15 @@
               <a
                 class="btn btn-primary btn-xs"
                 th:href="@{/form/} + ${cliente.id}"
-                >editar</a
+                >Editar</a
+              >
+            </td>
+            <td>
+              <a
+                class="btn btn-danger btn-xs"
+                th:href="@{/eliminar/} + ${cliente.id}"
+                onclick="return confirm('¿Estás seguro que quieres eliminar?');"
+                >Eliminar</a
               >
             </td>
           </tr>
