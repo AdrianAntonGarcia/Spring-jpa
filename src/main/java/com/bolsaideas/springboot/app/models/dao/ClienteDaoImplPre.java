@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.bolsaideas.springboot.app.models.entity.Cliente;
 
-@Repository("clienteDaoJPA")
-public class ClienteDaoImpl implements IClienteDao {
+@Repository("clienteDaoJPAPre")
+public class ClienteDaoImplPre implements IClienteDaoPre {
 
 	@PersistenceContext
 	private EntityManager em;

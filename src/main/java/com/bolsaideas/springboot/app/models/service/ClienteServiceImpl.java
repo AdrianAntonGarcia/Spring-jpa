@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service("clienteServiceImpl")
+@Service
 public class ClienteServiceImpl implements IClienteService {
 
     @Autowired
@@ -18,13 +18,13 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     @Transactional(readOnly = true)
     public List<Cliente> findaAll() {
-        return clienteDao.findaAll();
+        return (List<Cliente>) clienteDao.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Cliente findOne(Long id) {
-        return clienteDao.findOne(id);
+        return clienteDao.findById(id).orElse(null);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ClienteServiceImpl implements IClienteService {
     @Override
     @Transactional
     public void delete(Long id) {
-        clienteDao.delete(id);
+        clienteDao.deleteById(id);
     }
 
 }

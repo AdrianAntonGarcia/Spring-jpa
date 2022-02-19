@@ -1,17 +1,13 @@
 package com.bolsaideas.springboot.app.models.dao;
 
-import java.util.List;
-
 import com.bolsaideas.springboot.app.models.entity.Cliente;
 
-public interface IClienteDao {
+import org.springframework.data.repository.CrudRepository;
 
-	public List<Cliente> findaAll();
-
-	public void save(Cliente cliente);
-
-	public Cliente findOne(Long id);
-
-	public void delete(Long id);
+/**
+ * Primer parámetro la clase y el segundo el tipo de dato de la clave de la
+ * tabla
+ */
+public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
 }
