@@ -92,8 +92,8 @@
               <div class="col-sm-6">
                 <input
                   type="submit"
-                  value="Crear cliente"
-                  class="btn btn-secondary"
+                  th:value="${(id != null) ? 'Editar cliente' : 'Crear cliente'}"
+                  class="btn btn-primary"
                 />
               </div>
             </div>
