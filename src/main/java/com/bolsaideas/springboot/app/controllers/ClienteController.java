@@ -16,8 +16,8 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
-import com.bolsaideas.springboot.app.models.dao.IClienteDao;
 import com.bolsaideas.springboot.app.models.entity.Cliente;
+import com.bolsaideas.springboot.app.models.service.IClienteService;
 
 /**
  * Guardamos el objeto cliente en sesión para tener el campo id que no vendría
@@ -28,13 +28,13 @@ import com.bolsaideas.springboot.app.models.entity.Cliente;
 public class ClienteController {
 
 	@Autowired
-	@Qualifier("clienteDaoJPA")
-	private IClienteDao clienteDao;
+	@Qualifier("clienteServiceImpl")
+	private IClienteService clienteService;
 
 	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(Model model) {
 		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("clientes", clienteDao.findaAll());
+		model.addAttribute("clientes", clienteService.findaAll());
 		return "listar";
 	}
 
@@ -65,7 +65,7 @@ public class ClienteController {
 			model.addAttribute("titulo", "Formulario de Cliente");
 			return "form";
 		}
-		clienteDao.save(clienteN);
+		clienteService.save(clienteN);
 		status.setComplete();
 		return "redirect:listar";
 	}
@@ -74,7 +74,7 @@ public class ClienteController {
 	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model) {
 		Cliente cliente = null;
 		if (id > 0) {
-			cliente = clienteDao.findOne(id);
+			cliente = clienteService.findOne(id);
 		} else {
 			return "redirect:/listar";
 		}
@@ -86,7 +86,7 @@ public class ClienteController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id) {
 		if (id > 0) {
-			clienteDao.delete(id);
+			clienteService.delete(id);
 		}
 		return "redirect:/listar";
 	}
