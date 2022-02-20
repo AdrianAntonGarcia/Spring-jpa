@@ -1,5 +1,7 @@
 package com.bolsaideas.springboot.app.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -38,6 +41,8 @@ import com.bolsaideas.springboot.app.util.paginator.PageRender;
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
+
+	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	@Qualifier("clienteServiceImpl")
@@ -96,13 +101,27 @@ public class ClienteController {
 		if (!foto.isEmpty()) {
 			// Path directorioRecursos = Paths.get("src//main//resources//static/uploads");
 			// String rootPath = directorioRecursos.toFile().getAbsolutePath();
-			String rootPath = "C://Temp//uploads";
+			// String rootPath = "C://Temp//uploads";
+			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
+
+			// Path rootPath = Paths.get("uploads").resolve(foto.getOriginalFilename());
+			Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
+
+			Path rootAbsolutePath = rootPath.toAbsolutePath();
+			log.info("rootPath: " + rootPath);
+			log.info("rootAbsolutePath: " + rootAbsolutePath);
 			try {
-				byte[] bytes = foto.getBytes();
-				Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
-				Files.write(rutaCompleta, bytes);
-				flash.addFlashAttribute("info", "Has subido correctamente '" + foto.getOriginalFilename() + "'");
-				clienteN.setFoto(foto.getOriginalFilename());
+				// byte[] bytes = foto.getBytes();
+				// Path rutaCompleta = Paths.get(rootPath + "//" + foto.getOriginalFilename());
+				// Files.write(rutaCompleta, bytes);
+				Files.copy(foto.getInputStream(), rootAbsolutePath);
+				// flash.addFlashAttribute("info", "Has subido correctamente '" +
+				// foto.getOriginalFilename() + "'");
+				flash.addFlashAttribute("info", "Has subido correctamente '" + uniqueFilename + "'");
+
+				// clienteN.setFoto(foto.getOriginalFilename());
+				clienteN.setFoto(uniqueFilename);
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
