@@ -25,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -49,6 +50,8 @@ public class ClienteController {
 
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
+	private final static String UPLOADS_FOLDER_STRING = "uploads";
+
 	@Autowired
 	@Qualifier("clienteServiceImpl")
 	private IClienteService clienteService;
@@ -66,7 +69,7 @@ public class ClienteController {
 		/**
 		 * El resolve se usa para concatenar otras url
 		 */
-		Path pathFoto = Paths.get("uploads").resolve(filename).toAbsolutePath();
+		Path pathFoto = Paths.get(UPLOADS_FOLDER_STRING).resolve(filename).toAbsolutePath();
 		log.info("pathFoto: " + pathFoto);
 		Resource recurso = null;
 		try {
@@ -136,10 +139,18 @@ public class ClienteController {
 			// Path directorioRecursos = Paths.get("src//main//resources//static/uploads");
 			// String rootPath = directorioRecursos.toFile().getAbsolutePath();
 			// String rootPath = "C://Temp//uploads";
+			if (clienteN.getId() != null && clienteN.getId() > 0 && clienteN.getFoto() != null
+					&& clienteN.getFoto().length() > 0) {
+				Path rootPath = Paths.get(UPLOADS_FOLDER_STRING).resolve(clienteN.getFoto()).toAbsolutePath();
+				File archivo = rootPath.toFile();
+				if (archivo.exists() && archivo.canRead()) {
+					archivo.delete();
+				}
+			}
 			String uniqueFilename = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
 
 			// Path rootPath = Paths.get("uploads").resolve(foto.getOriginalFilename());
-			Path rootPath = Paths.get("uploads").resolve(uniqueFilename);
+			Path rootPath = Paths.get(UPLOADS_FOLDER_STRING).resolve(uniqueFilename);
 
 			Path rootAbsolutePath = rootPath.toAbsolutePath();
 			log.info("rootPath: " + rootPath);
@@ -188,8 +199,17 @@ public class ClienteController {
 	@RequestMapping(value = "/eliminar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
 		if (id > 0) {
+			Cliente clienteEliminar = clienteService.findOne(id);
 			clienteService.delete(id);
 			flash.addFlashAttribute("success", "Cliente eliminado con éxito!");
+
+			Path rootPath = Paths.get(UPLOADS_FOLDER_STRING).resolve(clienteEliminar.getFoto()).toAbsolutePath();
+			File archivo = rootPath.toFile();
+			if (archivo.exists() && archivo.canRead()) {
+				if (archivo.delete()) {
+					flash.addFlashAttribute("info", "Foto eliminada");
+				}
+			}
 		}
 		return "redirect:/listar";
 	}
