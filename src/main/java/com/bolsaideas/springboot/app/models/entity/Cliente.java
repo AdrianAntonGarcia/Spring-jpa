@@ -48,6 +48,8 @@ public class Cliente implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
 
+	private String foto;
+
 	// @PrePersist
 	// public void prePersist() {
 	// createdAt = new Date();
@@ -85,16 +87,24 @@ public class Cliente implements Serializable {
 		this.email = email;
 	}
 
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
 	public Date getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setcreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 }
