@@ -46,7 +46,7 @@ public class Factura implements Serializable {
 	private List<ItemFactura> items;
 
 	public Factura() {
-		items = new ArrayList<ItemFactura>();
+		this.items = new ArrayList<ItemFactura>();
 	}
 
 	@PrePersist

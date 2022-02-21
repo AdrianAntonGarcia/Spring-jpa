@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity(name = "facturas_items")
+@Entity
+@Table(name = "facturas_items")
 public class ItemFactura implements Serializable {
 
 	@Id

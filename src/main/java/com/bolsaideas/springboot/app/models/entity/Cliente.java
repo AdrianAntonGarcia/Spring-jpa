@@ -52,7 +52,7 @@ public class Cliente implements Serializable {
 	 * variable. El campo temporal indica como vamos a guardar la fecha
 	 */
 	@NotNull
-	@Column(name = "create_at")
+	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
