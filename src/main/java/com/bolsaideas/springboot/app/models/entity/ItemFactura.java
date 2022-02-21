@@ -3,9 +3,12 @@ package com.bolsaideas.springboot.app.models.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "facturas_items")
 public class ItemFactura implements Serializable {
@@ -15,6 +18,10 @@ public class ItemFactura implements Serializable {
 	private Long id;
 
 	private Integer cantidad;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "producto_id")
+	private Producto producto;
 
 	public Long getId() {
 		return id;
@@ -32,8 +39,8 @@ public class ItemFactura implements Serializable {
 		this.cantidad = cantidad;
 	}
 
-	public Long calcularImporte() {
-		return cantidad.longValue();
+	public Double calcularImporte() {
+		return cantidad.doubleValue() * producto.getPrecio();
 	}
 
 	private static final long serialVersionUID = -574209544400284666L;
