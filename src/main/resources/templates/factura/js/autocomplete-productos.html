@@ -45,6 +45,7 @@
       var itemsHelper = {
         calcularImporte: function (id, precio, cantidad) {
           $('#total_importe_' + id).html(parseInt(precio) * parseInt(cantidad));
+          this.calcularGranTotal();
         },
         hasProducto: function (id) {
           var resultado = false;
@@ -64,6 +65,15 @@
         },
         eliminarLineaFactura: function (id) {
           $('#row_' + id).remove();
+          this.calcularGranTotal();
+        },
+        calcularGranTotal: function () {
+          var total = 0;
+          // El ^ es para que lo trate como una expresión regular
+          $('span[id^="total_importe_"]').each(function () {
+            total += parseInt($(this).html());
+          });
+          $('#gran_total').html(total);
         },
       };
     </script>
