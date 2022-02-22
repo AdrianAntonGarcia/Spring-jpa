@@ -68,7 +68,7 @@ public class FacturaController {
 		}
 		clienteService.saveFactura(factura);
 		sessionStatus.setComplete();
-		flash.addAttribute("success", "Factura creada con éxito!");
+		flash.addFlashAttribute("success", "Factura creada con éxito!");
 		return "redirect:/ver/" + factura.getCliente().getId();
 	}
 }
