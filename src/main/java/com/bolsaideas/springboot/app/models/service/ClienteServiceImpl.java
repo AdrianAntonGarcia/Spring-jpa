@@ -70,4 +70,10 @@ public class ClienteServiceImpl implements IClienteService {
         this.facturaDao.save(factura);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Producto findProductoById(Long id) {
+        return productoDao.findById(id).orElse(null);
+    }
+
 }
