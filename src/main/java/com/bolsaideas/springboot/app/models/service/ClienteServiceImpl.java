@@ -3,7 +3,9 @@ package com.bolsaideas.springboot.app.models.service;
 import java.util.List;
 
 import com.bolsaideas.springboot.app.models.dao.IClienteDao;
+import com.bolsaideas.springboot.app.models.dao.IProductoDao;
 import com.bolsaideas.springboot.app.models.entity.Cliente;
+import com.bolsaideas.springboot.app.models.entity.Producto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Autowired
     private IClienteDao clienteDao;
+
+    @Autowired
+    private IProductoDao productoDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,6 +50,13 @@ public class ClienteServiceImpl implements IClienteService {
     @Transactional(readOnly = true)
     public Page<Cliente> findaAll(Pageable pageable) {
         return clienteDao.findAll(pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Producto> findByNombre(String term) {
+        // return productoDao.findByNombre(term);
+        return productoDao.findByNombreLikeIgnoreCase("%" + term + "%");
     }
 
 }
