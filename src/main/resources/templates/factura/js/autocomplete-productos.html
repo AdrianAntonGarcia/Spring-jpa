@@ -28,14 +28,22 @@
             //$('#buscar_producto').val(ui.item.label);
             console.log(ui);
             var linea = $('#plantillaItemsFactura').html();
+            // /g The "g" represents the "global modifier". This means that your replace will replace all copies of the matched string with the replacement string you provide.
             linea = linea.replace(/{ID}/g, ui.item.value);
             linea = linea.replace(/{NOMBRE}/g, ui.item.label);
             linea = linea.replace(/{PRECIO}/g, ui.item.precio);
             $('#cargarItemProductos tbody').append(linea);
+            itemsHelper.calcularImporte(ui.item.value, ui.item.precio, 1);
             return false;
           },
         });
       });
+
+      var itemsHelper = {
+        calcularImporte: function (id, precio, cantidad) {
+          $('#total_importe_' + id).html(parseInt(precio) * parseInt(cantidad));
+        },
+      };
     </script>
   </body>
 </html>
