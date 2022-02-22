@@ -40,6 +40,10 @@
             return false;
           },
         });
+        $('form').submit(() => {
+          $('#plantillaItemsFactura').remove();
+          return;
+        });
       });
 
       var itemsHelper = {
