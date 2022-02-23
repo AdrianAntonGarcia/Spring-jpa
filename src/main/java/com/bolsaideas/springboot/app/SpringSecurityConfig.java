@@ -27,7 +27,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		builder.inMemoryAuthentication().withUser(users.username("admin").password("12345").roles("ADMIN", "USER"))
 				.withUser(users.username("adrian").password("12345").roles("USER"));
-
 	}
 
 	@Override
@@ -37,6 +36,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/form/**").hasAnyRole("ADMIN").antMatchers("/eliminar/**").hasAnyRole("ADMIN")
 				.antMatchers("/factura/**").hasAnyRole("ADMIN").anyRequest().authenticated().and().formLogin()
 				.loginPage("/login")
-				.permitAll().and().logout().permitAll();
+				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/error_403");
 	}
 }
