@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.thymeleaf.org">
+<html
+  lang="en"
+  xmlns="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head th:replace="layout/layout :: head"></head>
   <body>
     <header th:replace="layout/layout :: navbar"></header>
@@ -9,6 +13,7 @@
         <div class="card-body">
           <h4 class="card-title">
             <a
+              sec:authorize="hasRole('ADMIN')"
               class="btn btn-success btn-xs"
               th:href="@{/factura/form/} + ${cliente.id}"
               >Crear Factura</a
@@ -42,8 +47,8 @@
                 <th>Descripción</th>
                 <th>Fecha</th>
                 <th>Total</th>
-                <th>Ver</th>
-                <th>Eliminar</th>
+                <th sec:authorize="hasRole('ADMIN')">Ver</th>
+                <th sec:authorize="hasRole('ADMIN')">Eliminar</th>
               </tr>
             </thead>
             <tbody>
@@ -54,12 +59,13 @@
                 <td th:text="${factura.total}"></td>
                 <td>
                   <a
+                    sec:authorize="hasRole('ADMIN')"
                     th:href="@{'/factura/ver/'+${factura.id}}"
                     th:text="'Detalle'"
                     class="btn btn-primary btn-xs"
                   ></a>
                 </td>
-                <td>
+                <td sec:authorize="hasRole('ADMIN')">
                   <a
                     th:href="@{'/factura/eliminar/'+${factura.id}}"
                     th:text="'Eliminar'"
