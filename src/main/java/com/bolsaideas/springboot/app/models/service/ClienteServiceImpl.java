@@ -40,6 +40,11 @@ public class ClienteServiceImpl implements IClienteService {
     }
 
     @Override
+    public Cliente findOneWithFacturas(Long id) {
+        return clienteDao.findClienteByIdWithFacturas(id);
+    }
+
+    @Override
     @Transactional
     public void save(Cliente cliente) {
         clienteDao.save(cliente);
@@ -84,7 +89,6 @@ public class ClienteServiceImpl implements IClienteService {
 
     @Override
     public Factura fetchFacturaByIdWithClienteWithItemFacturaWithProducto(Long id) {
-        // TODO Auto-generated method stub
         return facturaDao.fetchByIdWithClienteWithItemFacturaWithProducto(id);
     }
 
