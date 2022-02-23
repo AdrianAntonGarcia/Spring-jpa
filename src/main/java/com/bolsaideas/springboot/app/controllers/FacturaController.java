@@ -98,4 +98,16 @@ public class FacturaController {
 		flash.addFlashAttribute("success", "Factura creada con éxito!");
 		return "redirect:/ver/" + factura.getCliente().getId();
 	}
+
+	@GetMapping("/eliminar/{id}")
+	public String eliminar(@PathVariable(value = "id") Long facturaId, RedirectAttributes flash) {
+		Factura factura = clienteService.findFacturaById(facturaId);
+		if (factura != null) {
+			clienteService.deleteFactura(factura.getId());
+			flash.addFlashAttribute("success", "Factura eliminada con éxito");
+			return "redirect:/ver/" + factura.getCliente().getId();
+		}
+		flash.addFlashAttribute("error", "La factura no existe en la base de datos");
+		return "redirect:/listar";
+	}
 }
