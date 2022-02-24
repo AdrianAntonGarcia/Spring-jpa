@@ -3,7 +3,6 @@ package com.bolsaideas.springboot.app;
 import com.bolsaideas.springboot.app.auth.handler.LoginSuccessHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -25,14 +24,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler successHandler;
 
-	@Bean
-	public static BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
-		PasswordEncoder encoder = passwordEncoder();
+		PasswordEncoder encoder = passwordEncoder;
 		// UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 		UserBuilder users = User.builder().passwordEncoder(password -> encoder.encode(password));
 
