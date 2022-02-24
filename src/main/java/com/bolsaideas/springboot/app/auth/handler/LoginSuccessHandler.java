@@ -2,7 +2,6 @@ package com.bolsaideas.springboot.app.auth.handler;
 
 import java.io.IOException;
 
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +20,12 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             Authentication authentication) throws IOException, ServletException {
         SessionFlashMapManager flashMapManager = new SessionFlashMapManager();
         FlashMap flashMap = new FlashMap();
-        flashMap.put("success", "Ha iniciado sesión con éxito!");
+        flashMap.put("success", "hola " + authentication.getName() + ", has iniciado sesión con éxito!");
         flashMapManager.saveOutputFlashMap(flashMap, request, response);
+
+        if (authentication != null) {
+            logger.info("El usuario '" + authentication.getName() + "'' ha inicado sesión con exito");
+        }
         super.onAuthenticationSuccess(request, response, authentication);
     }
 

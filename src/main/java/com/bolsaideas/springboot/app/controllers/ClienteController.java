@@ -11,6 +11,8 @@ import com.bolsaideas.springboot.app.models.service.IClienteService;
 import com.bolsaideas.springboot.app.models.service.IUploadFileService;
 import com.bolsaideas.springboot.app.util.paginator.PageRender;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -19,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,6 +44,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
+
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	@Qualifier("clienteServiceImpl")
@@ -82,7 +88,19 @@ public class ClienteController {
 	}
 
 	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
+			Authentication authentication) {
+		if (authentication != null) {
+			logger.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
+		}
+		/**
+		 * Como obtener el authentication de manera estática
+		 */
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			logger.info("Utlizando forma estática SecurityContextHolder: Hola usuario autenticado, tu username es: "
+					.concat(auth.getName()));
+		}
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = clienteService.findaAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
