@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,10 @@ import com.bolsaideas.springboot.app.models.entity.ItemFactura;
 import com.bolsaideas.springboot.app.models.entity.Producto;
 import com.bolsaideas.springboot.app.models.service.IClienteService;
 
+/**
+ * Con el secured aquí aplicamos a todas las rutas a la vez
+ */
+@Secured("ROLE_ADMIN")
 @Controller
 @RequestMapping(value = "/factura")
 @SessionAttributes("factura")
