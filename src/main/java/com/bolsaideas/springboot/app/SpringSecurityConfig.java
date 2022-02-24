@@ -1,5 +1,7 @@
 package com.bolsaideas.springboot.app;
 
+import com.bolsaideas.springboot.app.auth.handler.LoginSuccessHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private LoginSuccessHandler successHandler;
 
 	@Bean
 	public static BCryptPasswordEncoder passwordEncoder() {
@@ -35,7 +40,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ver/**").hasAnyRole("USER").antMatchers("/uploads").hasAnyRole("USER")
 				.antMatchers("/form/**").hasAnyRole("ADMIN").antMatchers("/eliminar/**").hasAnyRole("ADMIN")
 				.antMatchers("/factura/**").hasAnyRole("ADMIN").anyRequest().authenticated().and().formLogin()
-				.loginPage("/login")
-				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/error_403");
+				.successHandler(successHandler).loginPage("/login").permitAll().and().logout().permitAll().and()
+				.exceptionHandling().accessDeniedPage("/error_403");
 	}
 }
