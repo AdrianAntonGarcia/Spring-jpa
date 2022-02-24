@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import com.bolsaideas.springboot.app.models.entity.Cliente;
@@ -27,6 +28,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -93,7 +95,10 @@ public class ClienteController {
 
 	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
 	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model,
-			Authentication authentication) {
+			Authentication authentication, HttpServletRequest request) {
+		/**
+		 * Diferentes formas de autenticar
+		 */
 		if (authentication != null) {
 			logger.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
 		}
@@ -111,6 +116,25 @@ public class ClienteController {
 		} else {
 			logger.info("Hola ".concat(auth.getName()).concat(" NO tienes acceso de administrador"));
 		}
+
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request,
+				"ROLE_");
+		if (securityContext.isUserInRole("ADMIN")) {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName())
+					.concat(" tienes acceso de administrador"));
+		} else {
+			logger.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName())
+					.concat(" NO tienes acceso de administrador"));
+		}
+
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName())
+					.concat(" tienes acceso de administrador"));
+		} else {
+			logger.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName())
+					.concat(" NO tienes acceso de administrador"));
+		}
+
 		Pageable pageRequest = PageRequest.of(page, 5);
 		Page<Cliente> clientes = clienteService.findaAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
