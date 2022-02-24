@@ -1,8 +1,10 @@
 package com.bolsaideas.springboot.app;
+// JDBC
 
-import javax.sql.DataSource;
+// import javax.sql.DataSource;
 
 import com.bolsaideas.springboot.app.auth.handler.LoginSuccessHandler;
+import com.bolsaideas.springboot.app.models.service.JpaUserDetailService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -23,11 +25,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler successHandler;
 
-	@Autowired
-	private DataSource dataSource;
+	// JDBC
+	// @Autowired
+	// private DataSource dataSource;
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+
+	@Autowired
+	JpaUserDetailService userDetailService;
 
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
@@ -47,10 +53,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		/**
 		 * Autenticación mediante jdbc
 		 */
-		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery("select username, password, enable from users where username=?")
-				.authoritiesByUsernameQuery(
-						"select u.username, a.authority from authorities a inner join users u on (a.user_id = u.id) where u.username=?");
+		// builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
+		// .usersByUsernameQuery("select username, password, enable from users where
+		// username=?")
+		// .authoritiesByUsernameQuery(
+		// "select u.username, a.authority from authorities a inner join users u on
+		// (a.user_id = u.id) where u.username=?");
+
+		/**
+		 * Con JPA
+		 */
+		builder.userDetailsService(userDetailService).passwordEncoder(passwordEncoder);
 	}
 
 	@Override
