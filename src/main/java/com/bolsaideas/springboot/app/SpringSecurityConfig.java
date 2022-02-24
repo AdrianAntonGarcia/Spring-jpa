@@ -1,5 +1,7 @@
 package com.bolsaideas.springboot.app;
 
+import javax.sql.DataSource;
+
 import com.bolsaideas.springboot.app.auth.handler.LoginSuccessHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +27,33 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	private LoginSuccessHandler successHandler;
 
 	@Autowired
+	private DataSource dataSource;
+
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception {
-		PasswordEncoder encoder = passwordEncoder;
-		// UserBuilder users = User.builder().passwordEncoder(encoder::encode);
-		UserBuilder users = User.builder().passwordEncoder(password -> encoder.encode(password));
+		/**
+		 * In memory authentication
+		 */
+		// PasswordEncoder encoder = passwordEncoder;
+		// // UserBuilder users = User.builder().passwordEncoder(encoder::encode);
+		// UserBuilder users = User.builder().passwordEncoder(password ->
+		// encoder.encode(password));
 
-		builder.inMemoryAuthentication().withUser(users.username("admin").password("12345").roles("ADMIN", "USER"))
-				.withUser(users.username("adrian").password("12345").roles("USER"));
+		// builder.inMemoryAuthentication().withUser(users.username("admin").password("12345").roles("ADMIN",
+		// "USER"))
+		// .withUser(users.username("adrian").password("12345").roles("USER"));
+		////////////////////////////
+
+		/**
+		 * Autenticación mediante jdbc
+		 */
+		builder.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder)
+				.usersByUsernameQuery("select username, password, enable from users where username=?")
+				.authoritiesByUsernameQuery(
+						"select u.username, a.authority from authorities a inner join users u on (a.user_id = u.id) where u.username=?");
 	}
 
 	@Override
