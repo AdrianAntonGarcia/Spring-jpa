@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
@@ -31,9 +32,11 @@ public class FacturaXlsxView extends AbstractXlsxView {
         // Nombre de la hoja dentro de excel
         Sheet sheet = workbook.createSheet("Factura Spring");
 
+        MessageSourceAccessor mensajes = getMessageSourceAccessor();
+
         Row row = sheet.createRow(0);
         Cell cell = row.createCell(0);
-        cell.setCellValue("Datos del cliente");
+        cell.setCellValue(mensajes.getMessage("text.factura.ver.datos.cliente"));
 
         row = sheet.createRow(1);
         cell = row.createCell(0);
