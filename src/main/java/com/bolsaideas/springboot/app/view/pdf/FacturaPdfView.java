@@ -17,7 +17,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
-@Component("/factura/ver")
+@Component("/factura/ver.pdf")
 public class FacturaPdfView extends AbstractPdfView {
 
     @Override
