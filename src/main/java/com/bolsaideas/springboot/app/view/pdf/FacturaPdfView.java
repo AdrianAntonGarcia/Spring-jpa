@@ -13,19 +13,22 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractPdfView;
 
-@Component("factura/ver")
+@Component("/factura/ver")
 public class FacturaPdfView extends AbstractPdfView {
 
     @Override
     protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("entro");
         Factura factura = (Factura) model.get("factura");
         PdfPTable tabla = new PdfPTable(1);
+        tabla.setSpacingAfter(20);
         tabla.addCell("Datos del cliente");
         tabla.addCell(factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
         tabla.addCell(factura.getCliente().getEmail());
 
         PdfPTable tabla2 = new PdfPTable(1);
+        tabla2.setSpacingAfter(20);
         tabla2.addCell("Datos de la factura");
         tabla2.addCell("Folio: " + factura.getId());
         tabla2.addCell("Descripción: " + factura.getDescripcion());
