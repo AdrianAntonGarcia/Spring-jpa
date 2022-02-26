@@ -20,6 +20,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "facturas")
@@ -40,7 +43,13 @@ public class Factura implements Serializable {
 	@Column(name = "created_at")
 	private Date createdAt;
 
+	/**
+	 * @JsonBackReference, no queremos que se muestren los clientes, se omite de la
+	 * serialización.
+	 * Pare trasera de la relación
+	 */
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Cliente cliente;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -88,6 +97,11 @@ public class Factura implements Serializable {
 		this.createdAt = createdAt;
 	}
 
+	/**
+	 * @XmlTransient omite este atributo en la serialización, no lo incluye en el
+	 *               xml
+	 */
+	@XmlTransient
 	public Cliente getCliente() {
 		return cliente;
 	}

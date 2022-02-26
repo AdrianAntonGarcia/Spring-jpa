@@ -21,6 +21,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -55,9 +58,17 @@ public class Cliente implements Serializable {
 	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createdAt;
 
+	/**
+	 * Con @JsonIgnore marcamos este atributo para que json lo ignore y no cree un
+	 * loop infinito
+	 * con @JsonManagedReference hacemos que spring maneje la relación y se muestren
+	 * las facturas en el json sin formar un loop
+	 */
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
+	@JsonManagedReference
 	private List<Factura> facturas;
 
 	private String foto;

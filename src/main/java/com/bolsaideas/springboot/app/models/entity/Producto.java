@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "productos")
+// @JsonIgnoreProperties({ "hibernateLazyInitializar", "handler" })
 public class Producto implements Serializable {
 
 	private static final long serialVersionUID = 5457559322038352138L;
