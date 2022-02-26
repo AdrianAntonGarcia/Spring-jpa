@@ -3,6 +3,7 @@ package com.bolsaideas.springboot.app.controllers;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import com.bolsaideas.springboot.app.models.entity.Cliente;
 import com.bolsaideas.springboot.app.models.service.IClienteService;
 import com.bolsaideas.springboot.app.models.service.IUploadFileService;
 import com.bolsaideas.springboot.app.util.paginator.PageRender;
+import com.bolsaideas.springboot.app.view.xml.ClienteList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +44,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -101,6 +104,16 @@ public class ClienteController {
 
 		model.put("titulo", "Detalle cliente: " + cliente.getNombre());
 		return "ver";
+	}
+
+	/**
+	 * 1 forma de hacer controladores rest, la otra es con @RestController
+	 * 
+	 * @return
+	 */
+	@GetMapping(value = "/listar-rest")
+	public @ResponseBody ClienteList listarRest() {
+		return new ClienteList(clienteService.findaAll());
 	}
 
 	@RequestMapping(value = { "/listar", "/" }, method = RequestMethod.GET)
