@@ -106,6 +106,11 @@ public class ClienteController {
 		return "ver";
 	}
 
+	/**
+	 * 1 forma de hacer controladores rest, la otra es con @RestController
+	 * 
+	 * @return
+	 */
 	@GetMapping(value = "/listar-rest")
 	public @ResponseBody ClienteList listarRest() {
 		return new ClienteList(clienteService.findaAll());
