@@ -22,6 +22,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -62,9 +63,11 @@ public class Cliente implements Serializable {
 	/**
 	 * Con @JsonIgnore marcamos este atributo para que json lo ignore y no cree un
 	 * loop infinito
+	 * con @JsonManagedReference hacemos que spring maneje la relación y se muestren
+	 * las facturas en el json sin formar un loop
 	 */
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "cliente", orphanRemoval = true)
-	@JsonIgnore
+	@JsonManagedReference
 	private List<Factura> facturas;
 
 	private String foto;
